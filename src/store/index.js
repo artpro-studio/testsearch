@@ -1,11 +1,21 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from "vue"
+import Vuex from "vuex"
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
-  actions: {},
+  state: {
+    inputSearch: null
+  },
+  mutations: {
+    setInputSearch(state, data){
+        state.inputSearch = data
+    }
+  },
+  actions: {
+    clickSearch({ commit }, data){
+      commit('setInputSearch', data)
+    }
+  },
   modules: {},
 });

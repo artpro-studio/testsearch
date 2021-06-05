@@ -7,8 +7,10 @@
                             class="page_search"
                         >
                             <v-card-title class="page_search__title text-h2 text-center mb-5">Введите то что ищите</v-card-title>
+                        <home-card-form />
+                        <home-card-result :result-number="counter" />
                     </v-card>
-                    <home-card-form />
+
                 </v-col>
             </v-row>
         </v-container>
@@ -18,15 +20,18 @@
 </template>
 <script>
 import HomeCardForm from "./HomeCardForm"
+import HomeCardResult from "./HomeCardResult";
     export default{
         name: "HomeCard",
         data(){
             return{
                 mainData:[],
+                counter: 0
             }
         },
         components:{
-            HomeCardForm
+            HomeCardForm,
+            HomeCardResult
         },
         methods:{
             setRandom(){
@@ -36,7 +41,7 @@ import HomeCardForm from "./HomeCardForm"
                         let result = ''
                         let words = '0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
                         let max_position = words.length - 1
-                        for(let i = 0; i < 100; i++ ) {
+                        for(let i = 0; i < 40; i++ ) {
                             let position = Math.floor ( Math.random() * max_position )
                             result = result + words.substring(position, position + 1)
                         }
@@ -54,13 +59,27 @@ import HomeCardForm from "./HomeCardForm"
                 }
 
                 mainRandom.call(this, 0)
-                localStorage.setItem('arrayRandom', JSON.stringify(this.mainData));
-            } 
+                localStorage.setItem('random', JSON.stringify(this.mainData));
+            },
+            counterSearch(search){
+                let filerData = this.mainData.filter(item => item.startsWith(search))
+                this.counter = filerData.length
+            }
         },
         created(){
-            setTimeout(() => {
-                this.setRandom();
-            }, 0)
+            let randomData = localStorage.getItem('random')
+            if(randomData){
+                this.mainData = JSON.parse(randomData)
+            }else{
+                setTimeout(() => {
+                    this.setRandom();
+                }, 0)
+            }
+        },
+        watch:{
+            '$store.state.inputSearch': function (e) {
+                this.counterSearch(e)
+            }
         }
     }
 </script>

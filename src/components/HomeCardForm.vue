@@ -1,5 +1,5 @@
 <template>
-    <v-form ref="form" class="page_search_form">
+    <v-form ref="form" class="page_search_form" @submit.prevent="searchData">
         <v-row>
             <v-col cols="12" md="10">
                 <v-text-field
@@ -12,6 +12,7 @@
                 <v-btn
                     color="primary"
                     class="page_search_btn"
+                    @click="searchData"
                 >
                 Поиск
                 </v-btn>
@@ -20,14 +21,20 @@
     </v-form>
 </template>
 <script>
-export default{
-    name: "HomeCardForm",
-    data(){
-        return{
-            search: '',
+    export default{
+        name: "HomeCardForm",
+        data(){
+            return{
+                search: this.$store.state.inputSearch || '',
+            }
+        },
+        methods:{
+            searchData(){
+                //Поиск данных
+                this.$store.dispatch('clickSearch', this.search)
+            }
         }
     }
-}
 </script>
 <style lang="scss" scoped>
     .page_search{
